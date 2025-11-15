@@ -1,0 +1,66 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { NextResponse } from "next/server";
+
+// Initialize the Gemini AI model
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro-preview-03-25" });
+
+// This is the main function that handles POST requests
+export async function POST(req) {
+  try {
+    // 1. Get the user's inputs from the request body
+    const body = await req.json();
+    const { cloth, clothColor, hasCar, carModel, location, vibe, customOptions } =
+      body;
+
+    // 2. --- This is the "Prompt Engineering" part ---
+    // We create a detailed instruction prompt for Gemini to follow.
+    const systemPrompt = `
+      You are an expert prompt creator for AI image generators (like Midjourney or DALL-E).
+      Your goal is to take a list of user inputs and combine them into a single, detailed,
+      vivid, and highly effective image prompt.
+
+      **Rules:**
+      - Combine all elements naturally into a scene description.
+      - Be descriptive. Instead of "a person wearing a red shirt", say "A person is styled in a vibrant red t-shirt...".
+      - The prompt should be a single paragraph.
+      - Add details about lighting, camera angle, and style (e.g., "photorealistic", "cinematic lighting", "wide-angle shot", "4K").
+
+      **User Inputs to use:**
+      - Main Subject: A person.
+      - Clothing: A ${clothColor} ${cloth}.
+      ${
+        hasCar
+          ? `- Vehicle: Include a ${carModel} nearby.`
+          : "- Vehicle: No car."
+      }
+      - Location: The scene is set at a ${location}.
+      - Vibe/Mood: The overall vibe should be ${vibe}.
+      ${
+        customOptions
+          ? `- Custom Details: Also include the following: ${customOptions}`
+          : ""
+      }
+
+      Now, generate the perfect image prompt based on those inputs.
+    `;
+
+    // 3. Call the Gemini API
+    const result = await model.generateContent(systemPrompt);
+    const response = await result.response;
+    const generatedPrompt = response.text();
+
+    // 4. Send the generated prompt back to the frontend
+    return NextResponse.json({
+      prompt: generatedPrompt,
+    });
+    
+  } catch (error) {
+    console.error(error);
+    // Send a more detailed error message back to the client
+    return NextResponse.json(
+      { error: "Failed to generate prompt", details: error.message },
+      { status: 500 }
+    );
+  }
+}

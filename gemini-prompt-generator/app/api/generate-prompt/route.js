@@ -5,16 +5,14 @@ import { NextResponse } from "next/server";
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro-preview-03-25" });
 
-// This is the main function that handles POST requests
 export async function POST(req) {
   try {
-    // 1. Get the user's inputs from the request body
+    // 1. Get the user's inputs
     const body = await req.json();
     const { cloth, clothColor, hasCar, carModel, location, vibe, customOptions } =
       body;
 
-    // 2. --- This is the "Prompt Engineering" part ---
-    // We create a detailed instruction prompt for Gemini to follow.
+    // 2. Create the system prompt
     const systemPrompt = `
       You are an expert prompt creator for AI image generators (like Midjourney or DALL-E).
       Your goal is to take a list of user inputs and combine them into a single, detailed,
@@ -57,7 +55,6 @@ export async function POST(req) {
     
   } catch (error) {
     console.error(error);
-    // Send a more detailed error message back to the client
     return NextResponse.json(
       { error: "Failed to generate prompt", details: error.message },
       { status: 500 }

@@ -1,1 +1,132 @@
 @import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: rgb(9, 9, 11);
+    color: rgb(244, 244, 245);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Style form inputs */
+  .input-base {
+    width: 100%;
+    border-radius: 0.5rem;
+    border-width: 2px;
+    border-color: rgb(63, 63, 70);
+    background-color: rgba(39, 39, 42, 0.5);
+    padding: 0.75rem;
+    color: rgb(244, 244, 245);
+    transition-property: all;
+    transition-duration: 200ms;
+  }
+  
+  .input-base::placeholder {
+    color: rgb(113, 113, 122);
+  }
+  
+  .input-base:focus {
+    border-color: rgb(37, 99, 235);
+    background-color: rgb(39, 39, 42);
+    outline: none;
+  }
+
+  .label-base {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(212, 212, 216);
+  }
+}
+
+@layer components {
+  /* Base button style */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition-property: all;
+    transition-duration: 200ms;
+    transition-timing-function: ease-in-out;
+    border: 2px solid transparent;
+  }
+  
+  .btn:focus-visible {
+    outline: 2px solid;
+    outline-offset: 2px;
+  }
+  
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* Primary button (e.g., Next, Generate) */
+  .btn-primary {
+    background-color: rgb(37, 99, 235);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: rgb(29, 78, 216);
+  }
+  
+  .btn-primary:focus-visible {
+    outline-color: rgb(37, 99, 235);
+  }
+
+  /* Secondary button (e.g., Back, GitHub) */
+  .btn-secondary {
+    background-color: rgb(39, 39, 42);
+    color: rgb(212, 212, 216);
+  }
+  
+  .btn-secondary:hover {
+    background-color: rgb(63, 63, 70);
+  }
+  
+  .btn-secondary:focus-visible {
+    outline-color: rgb(113, 113, 122);
+  }
+  
+  .btn-secondary:disabled {
+    background-color: rgb(39, 39, 42);
+    color: rgb(161, 161, 170);
+  }
+  
+  /* Icon button (e.g., Copy, Save) */
+  .btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 0.5rem;
+    background-color: rgb(39, 39, 42);
+    color: rgb(212, 212, 216);
+    transition-property: all;
+    transition-duration: 200ms;
+  }
+  
+  .btn-icon:hover {
+    background-color: rgb(63, 63, 70);
+    color: rgb(244, 244, 245);
+  }
+  
+  /* Helper for centering with flex */
+  .flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
